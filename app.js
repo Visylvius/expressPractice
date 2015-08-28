@@ -14,7 +14,14 @@ app.get('/', function(request, response) {
 });
 app.get('/blocks', function(request, response) {
   var blocks = ['Fixed', 'Movable', 'Rotating'];
-  response.send(blocks);
+  //better syntax for JSON objects and arrays is
+  response.json(blocks);
+  //same as
+  // response.send(blocks);
+  // to redirect a path use the redirect function;
+  //in order to make the path permanent you need to include
+  // 301 as the first argument in the function;
+  response.redirect(301, '/parts');
 });
 app.listen(3000, function() {
   console.log('Listening on port 3000');
