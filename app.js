@@ -5,6 +5,9 @@
 
 var express = require('express');
 var app = express();
+var logger = require('./logger');
+app.use(logger);
+
 
 // app.get('/', function(request, response) {
   // response.send('Hello, this is dog');
