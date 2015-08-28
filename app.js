@@ -21,7 +21,7 @@ app.get('/blocks', function(request, response) {
   // to redirect a path use the redirect function;
   //in order to make the path permanent you need to include
   // 301 as the first argument in the function;
-  response.redirect(301, '/parts');
+  // response.redirect(301, '/parts');
 });
 // app.listen(3000, function() {
 //   console.log('Listening on port 3000');
