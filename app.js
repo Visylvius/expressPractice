@@ -21,9 +21,16 @@ var blocks = {
 // });
 // :name creates name property on the request.params object
 app.get('/blocks/:name', function(request, response) {
+  // request.params.name will return undefined when no property is found for a given block name
   var description = blocks[request.params.name];
+  //checks for the presence of a description to determine the response
+  if (!description) {
+    response.status(404).json('No description found for ' + request.params.name);
+  } else {
+    response.json(description);
+  }
   //defaults to 200 success status code
-  response.json(description);
+
   // var blocks = ['Fixed', 'Movable', 'Rotating'];
   // if (request.query.limit >= 0) {
   //   response.json(blocks.slice(0, request.query.limit));
