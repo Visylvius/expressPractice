@@ -12,7 +12,11 @@ var blocks = {
   'Movable': 'Capable of being moved',
   'Rotating': 'Moving in a circle around its center'
 };
-
+var locations = {
+  'Fixed': 'First floor',
+  'Movable': 'Second floor',
+  'Rotating': 'Penthouse'
+};
 // app.get('/', function(request, response) {
   // response.send('Hello, this is dog');
   // same as
@@ -22,7 +26,9 @@ var blocks = {
 // :name creates name property on the request.params object
 app.get('/blocks/:name', function(request, response) {
   // request.params.name will return undefined when no property is found for a given block name
-  var description = blocks[request.params.name];
+  var name = request.params.name;
+  var block = name[0].toUpperCase() + name.slice(1).toLowerCase();
+  var description = blocks[block];
   //checks for the presence of a description to determine the response
   if (!description) {
     response.status(404).json('No description found for ' + request.params.name);
