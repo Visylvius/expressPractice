@@ -24,11 +24,19 @@ var locations = {
   //response.end();
 // });
 // :name creates name property on the request.params object
-app.get('/blocks/:name', function(request, response) {
-  // request.params.name will return undefined when no property is found for a given block name
+app.param('name', function(request, response, next) {
   var name = request.params.name;
   var block = name[0].toUpperCase() + name.slice(1).toLowerCase();
-  var description = blocks[block];
+  // can be accessed from other routes in the application
+  request.blockName = block;
+  //must be called to resume request stack
+  next();
+});
+app.get('/blocks/:name', function(request, response) {
+  // request.params.name will return undefined when no property is found for a given block name
+  // var name = request.params.name;
+  // var block = name[0].toUpperCase() + name.slice(1).toLowerCase();
+  var description = blocks[request.blockName];
   //checks for the presence of a description to determine the response
   if (!description) {
     response.status(404).json('No description found for ' + request.params.name);
@@ -50,6 +58,15 @@ app.get('/blocks/:name', function(request, response) {
     // 301 as the first argument in the function;
     // response.redirect(301, '/parts');
   // }
+});
+app.get('/locations/:name', function(request, response) {
+  var location = locations[request.blockName];
+  var description = blocks[request.blockName];
+  if (!description) {
+    response.status(404).json('No description found for ' + request.params.name);
+  } else {
+    response.json(description);
+  }
 });
 // app.listen(3000, function() {
 //   console.log('Listening on port 3000');
