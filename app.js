@@ -17,6 +17,9 @@ var locations = {
   'Movable': 'Second floor',
   'Rotating': 'Penthouse'
 };
+app.get('/blocks', function(request, response) {
+  response.json(Object.keys(blocks));
+});
 // app.get('/', function(request, response) {
   // response.send('Hello, this is dog');
   // same as
