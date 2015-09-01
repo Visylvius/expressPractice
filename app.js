@@ -6,46 +6,20 @@
 
 var express = require('express');
 var app = express();
-var bodyParser = require('body-parser');
-var parseUrlencoded = bodyParser.urlencoded({ extended: false });
+var blocks = require('/routes/blocks');
+app.use('/blocks', blocks);
 var logger = require('./logger');
 app.use(logger);
 var blocksRoute = app.route('/blocks');
-var blocks = {
-  'Fixed': 'Fastened securely in position',
-  'Movable': 'Capable of being moved',
-  'Rotating': 'Moving in a circle around its center'
-};
+
 var locations = {
   'Fixed': 'First floor',
   'Movable': 'Second floor',
   'Rotating': 'Penthouse'
 };
-app.route('/blocks')
-  .post(parseUrlencoded, function(request, response) {
-  var newBlock = request.body;
-  blocks[newBlock.name] = newBlock.description;
-  response.status(201).json(newBlock.name);
-  })
-  .get(function(request, response) {
-  response.json(Object.keys(blocks));
-});
-app.route('/blocks/:name')
-  .delete(function(request, response) {
-  delete blocks[request.blockName];
-  response.sendStatus(200);
-  })
-  .get(function(request, response) {
-  // request.params.name will return undefined when no property is found for a given block name
-  // var name = request.params.name;
-  // var block = name[0].toUpperCase() + name.slice(1).toLowerCase();
-  var description = blocks[request.blockName];
-  //checks for the presence of a description to determine the response
-  if (!description) {
-    response.status(404).json('No description found for ' + request.params.name);
-  } else {
-    response.json(description);
-  }
+app.use('/blocks');
+app.use('/blocks/:name');
+
 // app.get('/', function(request, response) {
   // response.send('Hello, this is dog');
   // same as
@@ -54,13 +28,7 @@ app.route('/blocks/:name')
 // });
 // :name creates name property on the request.params object
 app.param('name', function(request, response, next) {
-  var name = request.params.name;
-  var block = name[0].toUpperCase() + name.slice(1).toLowerCase();
-  // can be accessed from other routes in the application
-  request.blockName = block;
-  //must be called to resume request stack
-  next();
-});
+  });
 
   //defaults to 200 success status code
 
