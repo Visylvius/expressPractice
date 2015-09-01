@@ -2,9 +2,12 @@
 // to install a specific version of express
 // npm install express@4.9
 // npm install express@3.15.2
+//npm install body-parser
 
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser');
+var parseUrlencoded = bodyParser.urlencoded({ extended: false });
 var logger = require('./logger');
 app.use(logger);
 var blocks = {
@@ -17,6 +20,11 @@ var locations = {
   'Movable': 'Second floor',
   'Rotating': 'Penthouse'
 };
+app.post('/blocks', parseUrlencoded, function(request, response) {
+  var newBlock = request.body;
+  blocks[newBlock.name] = newBlock.description;
+  response.status(201).json(newBlock.name);
+});
 app.get('/blocks', function(request, response) {
   response.json(Object.keys(blocks));
 });
