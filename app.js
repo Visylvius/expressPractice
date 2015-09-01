@@ -10,6 +10,7 @@ var bodyParser = require('body-parser');
 var parseUrlencoded = bodyParser.urlencoded({ extended: false });
 var logger = require('./logger');
 app.use(logger);
+var blocksRoute = app.route('/blocks');
 var blocks = {
   'Fixed': 'Fastened securely in position',
   'Movable': 'Capable of being moved',
@@ -20,18 +21,31 @@ var locations = {
   'Movable': 'Second floor',
   'Rotating': 'Penthouse'
 };
-app.post('/blocks', parseUrlencoded, function(request, response) {
+app.route('/blocks')
+  .post(parseUrlencoded, function(request, response) {
   var newBlock = request.body;
   blocks[newBlock.name] = newBlock.description;
   response.status(201).json(newBlock.name);
-});
-app.get('/blocks', function(request, response) {
+  })
+  .get(function(request, response) {
   response.json(Object.keys(blocks));
 });
-app.delete('/blocks/:name', function(request, response) {
+app.route('/blocks/:name')
+  .delete(function(request, response) {
   delete blocks[request.blockName];
   response.sendStatus(200);
-});
+  })
+  .get('/blocks/:name', function(request, response) {
+  // request.params.name will return undefined when no property is found for a given block name
+  // var name = request.params.name;
+  // var block = name[0].toUpperCase() + name.slice(1).toLowerCase();
+  var description = blocks[request.blockName];
+  //checks for the presence of a description to determine the response
+  if (!description) {
+    response.status(404).json('No description found for ' + request.params.name);
+  } else {
+    response.json(description);
+  }
 // app.get('/', function(request, response) {
   // response.send('Hello, this is dog');
   // same as
@@ -47,17 +61,7 @@ app.param('name', function(request, response, next) {
   //must be called to resume request stack
   next();
 });
-app.get('/blocks/:name', function(request, response) {
-  // request.params.name will return undefined when no property is found for a given block name
-  // var name = request.params.name;
-  // var block = name[0].toUpperCase() + name.slice(1).toLowerCase();
-  var description = blocks[request.blockName];
-  //checks for the presence of a description to determine the response
-  if (!description) {
-    response.status(404).json('No description found for ' + request.params.name);
-  } else {
-    response.json(description);
-  }
+
   //defaults to 200 success status code
 
   // var blocks = ['Fixed', 'Movable', 'Rotating'];
