@@ -35,7 +35,7 @@ app.route('/blocks/:name')
   delete blocks[request.blockName];
   response.sendStatus(200);
   })
-  .get('/blocks/:name', function(request, response) {
+  .get(function(request, response) {
   // request.params.name will return undefined when no property is found for a given block name
   // var name = request.params.name;
   // var block = name[0].toUpperCase() + name.slice(1).toLowerCase();
