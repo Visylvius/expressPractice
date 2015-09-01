@@ -28,6 +28,10 @@ app.post('/blocks', parseUrlencoded, function(request, response) {
 app.get('/blocks', function(request, response) {
   response.json(Object.keys(blocks));
 });
+app.delete('/blocks/:name', function(request, response) {
+  delete blocks[request.blockName];
+  response.sendStatus(200);
+});
 // app.get('/', function(request, response) {
   // response.send('Hello, this is dog');
   // same as
