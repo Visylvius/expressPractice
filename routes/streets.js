@@ -16,3 +16,4 @@ street.route('/:name')
     request.streetName = street;
     next();
   });
+module.exports = router;
